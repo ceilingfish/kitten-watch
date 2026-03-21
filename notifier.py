@@ -8,6 +8,7 @@ def _item_html(item: FeedItem) -> str:
     snippet = item.description_text[:800].replace("\n", "<br>")
     return f"""
         <div style="border-top:2px solid #b45309;padding:20px 0">
+            <p style="color:#888;font-size:0.8em;margin:0 0 4px 0">📍 {item.source}</p>
             <h2 style="color:#b45309;margin-top:0">🐱 {item.title}</h2>
             {image_html}
             <p style="color:#555;font-size:0.85em">Posted: {item.pub_date}</p>

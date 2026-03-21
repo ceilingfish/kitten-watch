@@ -1,0 +1,17 @@
+rssFeeds:
+  - name: Heronbank Cat Rescue
+    url: https://rss.app/feeds/8ZEez9pneLj9S3q2.xml
+  - name: RSPCA Cat Rescue
+    url: https://rss.app/feeds/WqvTyqOZkn58XvCb.xml
+  - name: Button Cat Rescue
+    url: https://rss.app/feeds/U4L2ZvemCy1ogDqG.xml
+  - name: Cat Protection League
+    url: https://rss.app/feeds/zAlOeQjKCO6LOwrj.xml
+  - name: Allerton Cat Rescue
+    url: https://rss.app/feeds/GalXjuKJ4cqS5kUa.xml
+  - name: Yorkshire Cat Rescue
+    url: https://rss.app/feeds/nKwrtGL2xzwxwuJd.xml
+
+  # Add more sources below, e.g.:
+  # - name: Yorkshire Cat Rescue
+  #   url: https://rss.app/feeds/XXXXXXXXXXXXXXXX.xml

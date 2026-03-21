@@ -12,8 +12,6 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python main.py
     envVars:
-      - key: RSS_FEED_URL
-        value: https://rss.app/feeds/8ZEez9pneLj9S3q2.xml
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT

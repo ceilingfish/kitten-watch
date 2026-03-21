@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, yaml
 from dotenv import load_dotenv
 load_dotenv(override=True)
 from db import ensure_table, is_seen, mark_seen
@@ -6,21 +6,29 @@ from scraper import fetch_items
 from filter import is_interesting
 from notifier import send_digest
 
+def load_sources() -> list[dict]:
+    with open("sources.yaml") as f:
+        return yaml.safe_load(f)["rssFeeds"]
+
 def run():
-    feed_url = os.environ.get("RSS_FEED_URL", "https://rss.app/feeds/8ZEez9pneLj9S3q2.xml")
     print("🐾 Kitten Watch starting...")
     ensure_table()
-    items = fetch_items(feed_url)
-    print(f"  Fetched {len(items)} items from feed")
+    sources = load_sources()
+    print(f"  {len(sources)} source(s) configured")
     matched = []
-    for item in items:
-        if is_seen(item.guid):
-            continue
-        print(f"  New item: {item.title!r}")
-        if is_interesting(item):
-            print("  ✅ Matched")
-            matched.append(item)
-        mark_seen(item.guid)
+    for source in sources:
+        print(f"  Fetching {source['name']}")
+        items = fetch_items(source["url"])
+        print(f"    {len(items)} item(s) fetched")
+        for item in items:
+            if is_seen(item.guid):
+                continue
+            item.source = source["name"]
+            print(f"    New: {item.title!r}")
+            if is_interesting(item):
+                print("    ✅ Matched")
+                matched.append(item)
+            mark_seen(item.guid)
     if matched:
         try:
             send_digest(matched)

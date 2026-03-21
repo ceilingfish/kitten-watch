@@ -1,3 +1,4 @@
 feedparser==6.0.11
+pyyaml
 pg8000
 python-dotenv

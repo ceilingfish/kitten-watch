@@ -10,6 +10,7 @@ class FeedItem:
     link: str
     image_url: Optional[str]
     pub_date: str
+    source: str = ""
 
 def _strip_html(html: str) -> str:
     return re.sub(r"<[^>]+>", "", html).strip()
