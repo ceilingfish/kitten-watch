@@ -1,4 +1,6 @@
 import os, sys
+from dotenv import load_dotenv
+load_dotenv(override=True)
 from db import ensure_table, is_seen, mark_seen
 from scraper import fetch_items
 from filter import is_interesting
