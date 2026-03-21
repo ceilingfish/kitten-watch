@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: kittenwatch
+      POSTGRES_USER: kittenwatch
+      POSTGRES_PASSWORD: kittenwatch
+    ports:
+      - "5432:5432"
