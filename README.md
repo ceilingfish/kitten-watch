@@ -1,7 +1,6 @@
 # 🐾 Kitten Watch
 
-Monitors the Heronbank Cat Rescue Facebook group RSS feed and emails you when
-new kitten listings appear.
+Monitors the internet to discover kittens available for cuddles.
 
 ## Local dev
 ```bash
