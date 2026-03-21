@@ -4,7 +4,12 @@ import pg8000.dbapi
 
 def get_connection():
     url = urlparse(os.environ["DATABASE_URL"])
-    ssl_context = ssl.create_default_context() if os.environ.get("DB_SSL", "true") == "true" else None
+    if os.environ.get("DB_SSL", "true") == "true":
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+    else:
+        ssl_context = None
     return pg8000.dbapi.connect(
         host=url.hostname,
         port=url.port or 5432,
