@@ -1,0 +1,33 @@
+databases:
+  - name: kitten-watch-db
+    databaseName: kittenwatch
+    user: kittenwatch
+    plan: free
+
+services:
+  - type: cron
+    name: kitten-watch
+    runtime: python
+    schedule: "0 8,18 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: SMTP_HOST
+        sync: false
+        value: "smtp.gmail.com"
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USERNAME
+        sync: false
+        value: ceilingfish@gmail.com
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: NOTIFY_EMAIL
+        sync: false
+        value: ceilingfish@gmail.com,kristiana.parrish1@gmail.com
+      - key: DB_SSL
+        value: "true"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kitten-watch-db
+          property: connectionString
