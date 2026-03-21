@@ -5,7 +5,7 @@ from scraper import FeedItem
 P4H_URL = (
     "https://www.pets4homes.co.uk/sale/kittens/near-me/"
     "united-kingdom/england/west-yorkshire/"
-    "?distance=80&price=%2C400&keyword=kitten"
+    "?distance=30&price=%2C400&keyword=kitten"
 )
 
 def fetch_pets4homes(source_name: str) -> list[FeedItem]:
