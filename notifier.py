@@ -21,7 +21,7 @@ def send_digest(items: list[FeedItem]):
     smtp_port = int(os.environ.get("SMTP_PORT", 587))
     smtp_username = os.environ["SMTP_USERNAME"]
     smtp_password = os.environ["SMTP_PASSWORD"]
-    notify_email = os.environ["NOTIFY_EMAIL"]
+    notify_emails = [e.strip() for e in os.environ["NOTIFY_EMAIL"].split(",")]
     subject = f"🐱 Kitten Watch: {len(items)} new listing{'s' if len(items) != 1 else ''}"
     items_html = "".join(_item_html(item) for item in items)
     html_body = f"""<html><body style="font-family:sans-serif;max-width:600px;margin:auto;padding:20px">
@@ -32,10 +32,10 @@ def send_digest(items: list[FeedItem]):
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = smtp_username
-    msg["To"] = notify_email
+    msg["To"] = ", ".join(notify_emails)
     msg.attach(MIMEText(html_body, "html"))
     with smtplib.SMTP(smtp_host, smtp_port) as server:
         server.ehlo(); server.starttls()
         server.login(smtp_username, smtp_password)
-        server.sendmail(smtp_username, notify_email, msg.as_string())
+        server.sendmail(smtp_username, notify_emails, msg.as_string())
     print(f"  ✉️  Digest sent: {len(items)} item(s)")
