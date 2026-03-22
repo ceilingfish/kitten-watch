@@ -26,3 +26,4 @@ sources:
   - name: Pets4Homes (West Yorkshire)
     type: pets4homes
     skipFilter: true
+    distance: 15

@@ -2,14 +2,15 @@ import json, re
 import urllib.request
 from scraper import FeedItem
 
-P4H_URL = (
+P4H_URL_TEMPLATE = (
     "https://www.pets4homes.co.uk/sale/kittens/near-me/"
     "united-kingdom/england/west-yorkshire/"
-    "?distance=30&price=%2C400&keyword=kitten"
+    "?distance={distance}&price=%2C400&keyword=kitten"
 )
 
-def fetch_pets4homes(source_name: str) -> list[FeedItem]:
-    req = urllib.request.Request(P4H_URL, headers={"User-Agent": "Mozilla/5.0"})
+def fetch_pets4homes(source_name: str, distance: int = 15) -> list[FeedItem]:
+    url = P4H_URL_TEMPLATE.format(distance=distance)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req) as resp:
         html = resp.read().decode("utf-8")
 
