@@ -36,6 +36,9 @@ def fetch_pets4homes(source_name: str, distance: int = 15) -> list[FeedItem]:
         description = listing.get("displayDescription", "")
         price = listing.get("price", {}).get("amount", "")
         location = listing.get("location", {})
+        listing_distance = listing.get("distance")
+        if listing_distance is not None and listing_distance > distance:
+            continue
         location_str = ", ".join(filter(None, [location.get("postalTown"), location.get("adminRegion1")]))
         pub_date = listing.get("publishedAt", "")
         images = listing.get("images", [])
