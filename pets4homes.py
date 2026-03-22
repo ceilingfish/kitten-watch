@@ -1,6 +1,6 @@
 import json, re
 import urllib.request
-from scraper import FeedItem
+from scraper import FeedItem, parse_pub_date
 
 P4H_URL_TEMPLATE = (
     "https://www.pets4homes.co.uk/sale/kittens/near-me/"
@@ -57,5 +57,6 @@ def fetch_pets4homes(source_name: str, distance: int = 15) -> list[FeedItem]:
             image_url=image_url,
             pub_date=pub_date,
             source=source_name,
+            published_at=parse_pub_date(pub_date),
         ))
     return items
