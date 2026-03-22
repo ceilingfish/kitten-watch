@@ -8,7 +8,7 @@ from pets4homes import fetch_pets4homes
 from filter import is_interesting
 from notifier import send_digest
 
-MAX_AGE_DAYS = 30
+MAX_AGE_DAYS = 5
 
 def load_sources() -> list[dict]:
     with open("sources.yaml") as f:
