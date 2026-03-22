@@ -1,6 +1,24 @@
 import feedparser, re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Optional
+
+def parse_pub_date(date_str: str) -> Optional[datetime]:
+    """Parse an RFC 2822 or ISO 8601 date string into a timezone-aware datetime."""
+    if not date_str:
+        return None
+    try:
+        return parsedate_to_datetime(date_str)
+    except Exception:
+        pass
+    try:
+        dt = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    except Exception:
+        return None
 
 @dataclass
 class FeedItem:
@@ -11,6 +29,7 @@ class FeedItem:
     image_url: Optional[str]
     pub_date: str
     source: str = ""
+    published_at: Optional[datetime] = field(default=None, repr=False)
 
 def _strip_html(html: str) -> str:
     return re.sub(r"<[^>]+>", "", html).strip()
@@ -19,7 +38,7 @@ def fetch_items(feed_url: str) -> list[FeedItem]:
     feed = feedparser.parse(feed_url)
     items = []
     for entry in feed.entries:
-        guid = entry.get("id", entry.get("link", ""))
+        guid = entry.get("link", entry.get("id", ""))
         title = entry.get("title", "")
         description_html = entry.get("content", [{}])[0].get("value", "") or entry.get("summary", "")
         description_text = _strip_html(description_html)
@@ -30,5 +49,6 @@ def fetch_items(feed_url: str) -> list[FeedItem]:
         if media_content:
             image_url = media_content[0].get("url")
         items.append(FeedItem(guid=guid, title=title, description_text=description_text,
-                              link=link, image_url=image_url, pub_date=pub_date))
+                              link=link, image_url=image_url, pub_date=pub_date,
+                              published_at=parse_pub_date(pub_date)))
     return items
