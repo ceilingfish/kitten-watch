@@ -1,10 +1,10 @@
 import os, sys, yaml
 from dotenv import load_dotenv
 load_dotenv(override=True)
-from db import ensure_table, is_seen, is_title_seen, mark_seen
+from db import ensure_table, is_seen, mark_seen
 from scraper import fetch_items
 from pets4homes import fetch_pets4homes
-from filter import is_interesting, normalize_title
+from filter import is_interesting
 from notifier import send_digest
 
 def load_sources() -> list[dict]:
@@ -33,17 +33,12 @@ def run():
         for item in items:
             if is_seen(item.guid):
                 continue
-            title_key = normalize_title(item.title)
-            if title_key and is_title_seen(title_key):
-                print(f"    Skipped (duplicate title): {item.title!r}")
-                mark_seen(item.guid, title_key)
-                continue
             item.source = source["name"]
             print(f"    New: {item.title!r}")
             if source.get("skipFilter") or is_interesting(item):
                 print("    ✅ Matched")
                 matched.append(item)
-            mark_seen(item.guid, title_key)
+            mark_seen(item.guid)
     if matched:
         try:
             send_digest(matched)

@@ -28,12 +28,6 @@ def ensure_table():
             seen_at TIMESTAMPTZ DEFAULT NOW()
         )
     """)
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS seen_titles (
-            title_key TEXT PRIMARY KEY,
-            seen_at TIMESTAMPTZ DEFAULT NOW()
-        )
-    """)
     conn.commit()
     conn.close()
 
@@ -45,19 +39,9 @@ def is_seen(guid: str) -> bool:
     conn.close()
     return result
 
-def is_title_seen(title_key: str) -> bool:
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT 1 FROM seen_titles WHERE title_key = %s", (title_key,))
-    result = cur.fetchone() is not None
-    conn.close()
-    return result
-
-def mark_seen(guid: str, title_key: str = ""):
+def mark_seen(guid: str):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("INSERT INTO seen_guids (guid) VALUES (%s) ON CONFLICT DO NOTHING", (guid,))
-    if title_key:
-        cur.execute("INSERT INTO seen_titles (title_key) VALUES (%s) ON CONFLICT DO NOTHING", (title_key,))
     conn.commit()
     conn.close()

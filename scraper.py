@@ -19,7 +19,7 @@ def fetch_items(feed_url: str) -> list[FeedItem]:
     feed = feedparser.parse(feed_url)
     items = []
     for entry in feed.entries:
-        guid = entry.get("id", entry.get("link", ""))
+        guid = entry.get("link", entry.get("id", ""))
         title = entry.get("title", "")
         description_html = entry.get("content", [{}])[0].get("value", "") or entry.get("summary", "")
         description_text = _strip_html(description_html)
